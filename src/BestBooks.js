@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import BookFormModal from './BookFormModal';
 import {
   Card,
   Alert,
@@ -49,8 +50,13 @@ class BestBooks extends React.Component {
         email: this.state.email
       }
     }
+    axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/books`).then(res => {
+      this.setState({
+        book: res.data
+      })
+
+    })
     axios(config).then(res => {
-      console.log(res);
       // this.setState({
       //   book:res.data
       // })
@@ -78,23 +84,9 @@ class BestBooks extends React.Component {
 
     return (
       <>
-        <div>
-          <Col style={{ width: '50%' }}>
-            <Form onSubmit={this.handleSubmit}>
-              <Form.Label>Book name</Form.Label>
-              <Form.Control name='name' required />
-              <Form.Label>description</Form.Label>
-              <Form.Control as="textarea" rows={3} name='description' required />
-              <Form.Label>Status</Form.Label>
-              <Form.Control name='status' required />
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="name@example.com" name='email' required />
-              <Button variant="outline-primary" type="submit">
-                Submit
-              </Button>
-            </Form>
-          </Col>
-        </div>
+        <BookFormModal
+         handleSubmit={this.handleSubmit}
+         />
         <div>
           <h2>The best books</h2>
           <Row>
