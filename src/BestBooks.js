@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import BookFormModal from './BookFormModal';
+import UbdateForm from './UbdateForm';
 import {
   Card,
   Alert,
   Col,
   Row,
-  Form,
   Button
 } from 'react-bootstrap';
 
@@ -18,7 +18,9 @@ class BestBooks extends React.Component {
       bookName: '',
       description: '',
       boookStatus: '',
-      email: ''
+      email: '',
+      showUpdateForm: false,
+      updateId: ''
     }
 
   }
@@ -31,15 +33,17 @@ class BestBooks extends React.Component {
     })
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({
+
+    await this.setState({
       bookName: e.target[0].value,
       description: e.target[1].value,
       boookStatus: e.target[2].value,
       email: e.target[3].value
-    })
-    let config = {
+    });
+
+    let config = await {
       method: "POST",
       baseURL: `http://${process.env.REACT_APP_BACKEND_URL}`,
       url: "/creat-books",
@@ -49,44 +53,77 @@ class BestBooks extends React.Component {
         status: this.state.boookStatus,
         email: this.state.email
       }
+    };
+    axios(config).then(res => {
+      this.setState({
+        book: res.data
+      });
+    })
+  }
+
+  handleUpdate = (id, title, description, status, email) => {
+    this.setState({
+      updateId: id,
+      bookName: title,
+      description: description,
+      boookStatus: status,
+      email: email,
+      showUpdateForm: true
+    })
+  }
+  handleUpdateSubmit =async (e) => {
+    e.preventDefault();
+    await this.setState({
+      bookName: e.target[0].value,
+      description: e.target[1].value,
+      boookStatus: e.target[2].value,
+      email: e.target[3].value
+    })
+    let config = await{
+      method: "PUT",
+      baseURL: `http://${process.env.REACT_APP_BACKEND_URL}`,
+      url: `/update-book/${this.state.updateId}`,
+      data: {
+        title: this.state.bookName,
+        description: this.state.description,
+        status: this.state.boookStatus,
+        email: this.state.email
+      }
     }
-    axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/books`).then(res => {
+    await axios(config).then(res => {
       this.setState({
         book: res.data
       })
-
-    })
-    axios(config).then(res => {
-      // this.setState({
-      //   book:res.data
-      // })
-
-
+      console.log(res.data);
     })
   }
+
   handleDelete = (id) => {
     let bookId = id;
-    let config={
-      method:"DELETE",
-      baseURL:`http://${process.env.REACT_APP_BACKEND_URL}`,
-      url:`/delete-book/${bookId}`,
+    let config = {
+      method: "DELETE",
+      baseURL: `http://${process.env.REACT_APP_BACKEND_URL}`,
+      url: `/delete-book/${bookId}`,
+
     }
-    axios(config).then(response=>{
+    axios(config).then(response => {
       this.setState({
-        book:response.data
+        book: response.data
       })
     })
   }
-  /* TODO: Make a GET request to your API to fetch books for the logged in user  */
+
 
   render() {
     /* TODO: render user's books in a Carousel */
-
     return (
       <>
-        <BookFormModal
-         handleSubmit={this.handleSubmit}
-         />
+        {
+          this.state.showUpdateForm ?
+            <UbdateForm handleUpdateSubmit={this.handleUpdateSubmit} />
+            :
+            <BookFormModal handleSubmit={this.handleSubmit} />
+        }
         <div>
           <h2>The best books</h2>
           <Row>
@@ -103,7 +140,18 @@ class BestBooks extends React.Component {
                           {item.description}
                         </Card.Text>
                         <Card.Link href="#">{item.email}</Card.Link>
-                        <Button variant="primary" onClick={()=>this.handleDelete(item._id)}>click to Delete book</Button>
+                        <Button
+                          style={{ margin: '18px' }}
+                          variant="primary"
+                          onClick={() => this.handleDelete(item._id)}>
+                          click to Delete book
+                        </Button>
+                        <Button
+                          style={{ margin: '18px' }}
+                          variant="primary"
+                          onClick={() =>this.handleUpdate(item._id, item.title, item.description, item.status, item.email)}>
+                          click to update book
+                        </Button>
                       </Card.Body>
                     </Card>
                   </Col>

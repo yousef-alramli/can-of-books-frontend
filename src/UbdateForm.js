@@ -3,13 +3,16 @@ import {
     Col,
     Form,
     Button
-  } from 'react-bootstrap';
-class BookFormModal extends Component {
+} from 'react-bootstrap';
+
+class UbdateForm extends Component {
     render() {
         return (
             <div>
                 <Col style={{ width: '50%' }}>
-                    <Form onSubmit={(e)=>{this.props.handleSubmit(e)}}>
+                    <Form onSubmit={(e) => {
+                         this.props.handleUpdateSubmit(e) 
+                         }}>
                         <Form.Label>Book name</Form.Label>
                         <Form.Control name='name' required />
                         <Form.Label>description</Form.Label>
@@ -18,8 +21,8 @@ class BookFormModal extends Component {
                         <Form.Control name='status' required />
                         <Form.Label>Email address</Form.Label>
                         <Form.Control type="email" placeholder="name@example.com" name='email' required />
-                        <Button variant="outline-primary" type="submit">
-                            Submit
+                        <Button variant="outline-danger" type="submit">
+                            update
                         </Button>
                     </Form>
                 </Col>
@@ -28,4 +31,4 @@ class BookFormModal extends Component {
     }
 }
 
-export default BookFormModal
+export default UbdateForm
