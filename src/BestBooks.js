@@ -125,45 +125,45 @@ class BestBooks extends React.Component {
         }
         <div>
           <h2>The best books</h2>
-            <Carousel>
+          <Carousel variant="dark">
             {this.state.book.length !== 0 ? (
 
               this.state.book.map(item => {
                 return <Carousel.Item>
-                      <img
-                       style ={{height: '670px'}}
-                        className="d-block w-100"
-                        src="https://www.ukrgate.com/eng/wp-content/uploads/2021/02/The-Ukrainian-Book-Institute-Purchases-380.9-Thousand-Books-for-Public-Libraries1.jpeg"
-                        alt="First slide"
-                      />
-                      <Carousel.Caption>
-                        <h3>Book name: {item.title}</h3>
-                        <p>{item.status}</p>
-                        <p>{item.description}</p>
-                        <p>Email: {item.email}</p>
-                      </Carousel.Caption>
-                    <Button
-                      style={{ margin: '18px' }}
-                      variant="primary"
-                      onClick={() => this.handleDelete(item._id)}>
-                      click to Delete book
-                    </Button>
-                    <Button
-                      style={{ margin: '18px' }}
-                      variant="info"
-                      onClick={() => this.handleUpdate(item._id, item.title, item.description, item.status, item.email)}>
-                      click to update book
-                    </Button>
-                    </Carousel.Item>
+                  <Button
+                    style={{ margin: '30px' }}
+                    variant="primary"
+                    onClick={() => this.handleDelete(item._id)}>
+                    click to Delete book
+                  </Button>
+                  <Button
+                    style={{ margin: '30px' }}
+                    variant="info"
+                    onClick={() => this.handleUpdate(item._id, item.title, item.description, item.status, item.email)}>
+                    click to update book
+                  </Button>
+                  <img
+                    style={{ height: '670px' }}
+                    className="d-block w-100"
+                    src="https://www.ukrgate.com/eng/wp-content/uploads/2021/02/The-Ukrainian-Book-Institute-Purchases-380.9-Thousand-Books-for-Public-Libraries1.jpeg"
+                    alt="First slide"
+                  />
+                  <Carousel.Caption>
+                    <h3>Book name: {item.title}</h3>
+                    <p>{item.status}</p>
+                    <p>{item.description}</p>
+                    <p>Email: {item.email}</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
 
-                
+
               })
-              ) : (
-                <Alert variant='danger'>
+            ) : (
+              <Alert variant='danger'>
                 There's no books.
               </Alert>
             )}
-            </Carousel>
+          </Carousel>
         </div>
       </>
     )
